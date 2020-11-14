@@ -14,13 +14,26 @@ namespace CodingEvents.Controllers
         [HttpGet]
         public IActionResult Index()
         {
-            Events.Add("Strange Loop");
-            Events.Add("Grace Hopper");
-            Events.Add("Code with Pride");
-
             ViewBag.events = Events;
 
             return View();
+        }
+
+        //GET: /<controller>/add
+        [HttpGet]
+        public IActionResult Add()
+        {
+            return View();
+        }
+
+        //GET: /<controller>/add
+        [HttpPost]
+        [Route("/Events/Add")]
+        public IActionResult NewEvent(string name)
+        {
+            Events.Add(name);
+
+            return Redirect("/Events");
         }
     }
 }
