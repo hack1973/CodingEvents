@@ -26,6 +26,7 @@ else
         <td>@meeting.Id</td>
         <td>@meeting.Name</td>
         <td>@meeting.Description</td>
+        <td><a asp-controller="Events" asp-action="Edit" asp-route-id="@meeting.Id">Edit Event</a></td>
     </tr>
         }
     </table>

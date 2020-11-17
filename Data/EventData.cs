@@ -20,9 +20,10 @@ namespace CodingEvents.Data
             return Events.Values;
         }
 
-        public static Event GetById(int id)
+        public static Event GetById(int id) 
         {
-            return Events[id];
+
+            return Events[id]; 
         }
 
         public static void Remove(int id)
