@@ -1,0 +1,19 @@
+﻿@using CodingEvents.ViewModels;
+@model AddEventCategoryViewModel;
+
+<style>
+    .field-validation-error {
+        color: red;
+    }
+</style>
+
+<h1>Add Event Category</h1>
+
+<form method="post" asp-controller="EventCategory" asp-action="Create">
+    <div class="form-group">
+        <label asp-for="Name">Event Category Name</label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <input type="submit" value="Add Event Category" />
+</form>
