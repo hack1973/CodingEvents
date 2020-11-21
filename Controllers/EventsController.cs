@@ -11,12 +11,18 @@ namespace CodingEvents.Controllers
 {
     public class EventsController : Controller
     {
-        //GET: /<controller>/
-        [HttpGet]
+        private EventDbContext context;
+
+        public EventsController(EventDbContext dbContext)
+        {
+            context = dbContext;
+        }
+
+            //GET: /<controller>/
+            [HttpGet]
         public IActionResult Index()
         {
-            List<Event> events = new List<Event>(EventData.GetAll());
-            //ViewBag.events = EventData.GetAll();
+            List<Event> events = context.Events.ToList();
 
             return View(events);
         }
@@ -43,7 +49,8 @@ namespace CodingEvents.Controllers
                     Type = addEventViewModel.Type
                 };
 
-                EventData.Add(newEvent);
+                context.Events.Add(newEvent);
+                context.SaveChanges();
 
                 return Redirect("/Events");
             }
@@ -53,9 +60,9 @@ namespace CodingEvents.Controllers
 
         public IActionResult Delete()
         {
-            ViewBag.events = EventData.GetAll();
+            List<Event> eventsToDelete = context.Events.ToList();
 
-            return View();
+            return View(eventsToDelete);
         }
 
         [HttpPost]
@@ -63,8 +70,10 @@ namespace CodingEvents.Controllers
         {
             foreach (int eventId in eventIds)
             {
-                EventData.Remove(eventId);
+                Event theEvent = context.Events.Find(eventId);
+                context.Events.Remove(theEvent);
             }
+            context.SaveChanges();
 
             return Redirect("/Events");
         }
@@ -74,21 +83,28 @@ namespace CodingEvents.Controllers
         [Route("/Events/Edit/{eventId}")] // /Events/Edit/eventId?
         public IActionResult Edit(int eventId)
         {
-            ViewBag.eventToEdit = EventData.GetById(eventId);
+            //EditEventViewModel editEventViewModel = new EditEventViewModel(eventId);
+            //EditEventViewModel editEventViewModel = context.Events.Find(eventId);
+            ViewBag.eventToEdit = context.Events.Find(eventId);
             // “Edit Event NAME (id=ID)” where "NAME" and "ID" are replaced by the values for the given event
-            ViewBag.title = "Edit Event " + ViewBag.eventToEdit.Name + " (id = " + ViewBag.eventToEdit.Id + ")";
+            //ViewBag.title = "Edit Event " + ViewBag.eventToEdit.Name + " (id = " + ViewBag.eventToEdit.Id + ")";
 
-            return View();
+            return View(ViewBag.eventToEdit);
         }
 
         [HttpPost]
         [Route("/Events/Edit")]
-        public IActionResult SubmitEditEventForm(int eventId, string name, string description)
+        public IActionResult SubmitEditEventForm(int eventId, string name, string description, string contactEmail)
         {
-            Event eventToEdit = EventData.GetById(eventId);
+            Event eventToEdit = context.Events.Find(eventId);
             eventToEdit.Name = name;
             eventToEdit.Description = description;
-            
+            eventToEdit.ContactEmail = contactEmail;
+
+            context.Events.Update(eventToEdit);
+            context.SaveChanges();
+
+
             return Redirect("/Events");
         }
     }

@@ -11,20 +11,17 @@ namespace CodingEvents.Models
         public string Description { get; set; }
         public string ContactEmail { get; set; }
         public EventType Type { get; set; }
-
-        public int Id { get; }
-        private static int nextId = 1;
+        public int Id { get; set; }
 
         public Event()
         {
-            Id = nextId;
-            nextId++;
         }
 
-        public Event(string name, string description): this()
+        public Event(string name, string description, string contactEmail)
         {
             Name = name;
-            Description = description;            
+            Description = description;
+            ContactEmail = contactEmail;
         }
 
         public override string ToString()
