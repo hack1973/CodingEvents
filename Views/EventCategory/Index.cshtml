@@ -1,0 +1,26 @@
+﻿@using CodingEvents.Models;
+@model List<EventCategory>
+
+<h1>Event Category</h1>
+
+@if (Model.Count == 0)
+{
+    <p>No Event Categories yet!</p>
+}
+else
+{
+    <table class="table">
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+        </tr>
+        @foreach (var eventCat in Model)
+        {
+            <tr>
+                <td>@eventCat.Id</td>
+                <td>@eventCat.Name</td>
+                <!--  <td><a asp-controller="Events" asp-action="Edit" asp-route-id="@eventCat.Id">Edit Event</a></td>  -->
+            </tr>
+        }
+    </table>
+}
