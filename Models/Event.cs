@@ -6,12 +6,13 @@ using System.Threading.Tasks;
 namespace CodingEvents.Models
 {
     public class Event
-    {        
+    {
+        public int Id { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string ContactEmail { get; set; }
-        public EventType Type { get; set; }
-        public int Id { get; set; }
+        public EventCategory Category { get; set; }
+        public int CategoryId { get; set; }
 
         public Event()
         {

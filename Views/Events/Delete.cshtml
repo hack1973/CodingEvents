@@ -3,6 +3,10 @@
 
 <h1>Delete Event</h1>
 
+<p>
+    <a asp-controller="Events" asp-action="Index">CodingEvents Home</a>
+</p>
+
 <form method="post" asp-controller="Events" asp-action="Delete">
     <table class="table">
         <tr>
@@ -10,7 +14,7 @@
             <th>Name</th>
             <th>Description</th>
             <th>Contact Email</th>
-            <th>Event Type</th>
+            <th>Category</th>
         </tr>
 
         @foreach (var meeting in Model)
@@ -20,7 +24,7 @@
                 <td>@meeting.Name</td>
                 <td>@meeting.Description</td>
                 <td>@meeting.ContactEmail</td>
-                <td>@meeting.Type</td>
+                <td>@meeting.Category.Name</td>
                 <td><input type="checkbox" name="eventIds" value="@meeting.Id" class="form-control"></td>
             </tr>
 

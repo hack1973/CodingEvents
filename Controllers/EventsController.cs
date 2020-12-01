@@ -6,6 +6,7 @@ using CodingEvents.Data;
 using CodingEvents.Models;
 using CodingEvents.ViewModels;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace CodingEvents.Controllers
 {
@@ -22,7 +23,9 @@ namespace CodingEvents.Controllers
             [HttpGet]
         public IActionResult Index()
         {
-            List<Event> events = context.Events.ToList();
+            List<Event> events = context.Events
+                .Include(e => e.Category)
+                .ToList();
 
             return View(events);
         }
@@ -31,7 +34,9 @@ namespace CodingEvents.Controllers
         [HttpGet]
         public IActionResult Add()
         {
-            AddEventViewModel addEventViewModel = new AddEventViewModel();
+            List<EventCategory> categories = context.Categories.ToList();
+            AddEventViewModel addEventViewModel = new AddEventViewModel(context.Categories.ToList());
+
             return View(addEventViewModel);
         }
 
@@ -41,12 +46,13 @@ namespace CodingEvents.Controllers
         {
             if (ModelState.IsValid)
             {
+                EventCategory theCategory = context.Categories.Find(addEventViewModel.CategoryId);
                 Event newEvent = new Event
                 {
                     Name = addEventViewModel.Name,
                     Description = addEventViewModel.Description,
                     ContactEmail = addEventViewModel.ContactEmail,
-                    Type = addEventViewModel.Type
+                    Category = theCategory
                 };
 
                 context.Events.Add(newEvent);
@@ -58,9 +64,12 @@ namespace CodingEvents.Controllers
             return View(addEventViewModel);
         }
 
+        [HttpGet]
         public IActionResult Delete()
-        {
-            List<Event> eventsToDelete = context.Events.ToList();
+        {            
+            List<Event> eventsToDelete = context.Events
+                .Include(e => e.Category)
+                .ToList();
 
             return View(eventsToDelete);
         }
@@ -106,6 +115,21 @@ namespace CodingEvents.Controllers
 
 
             return Redirect("/Events");
+        }
+
+        public IActionResult Detail(int id)
+        {
+            Event theEvent = context.Events
+               .Include(e => e.Category)
+               .Single(e => e.Id == id);
+
+            List<EventTag> eventTags = context.EventTags
+              .Where(et => et.EventId == id)
+              .Include(et => et.Tag)
+              .ToList();
+
+            EventDetailViewModel viewModel = new EventDetailViewModel(theEvent, eventTags);
+            return View(viewModel);
         }
     }
 }

@@ -1,0 +1,24 @@
+﻿@using CodingEvents.Models;
+@model Tag;
+
+<style>
+    .field-validation-error {
+        color: red;
+    }
+</style>
+
+<h1>Add Tag</h1>
+
+<p>
+    <a asp-controller="Tag" asp-action="Index">Tag Home</a>
+</p>
+
+<form method="post" asp-controller="Tag" asp-action="Add">
+    <div class="form-group">
+        <label asp-for="Name">Tag Name</label>
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <input type="submit" value="Add Tag" />
+</form>
+
